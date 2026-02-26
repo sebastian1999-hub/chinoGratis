@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commander Tracker - Sebas, Álvaro, Raúl</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent-2: #60a5fa;
+      --border: #374151;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 26px rgba(0,0,0,.28);
+    }
+
+    h1, h2 { margin: 0 0 10px; }
+    p { margin: 0; color: var(--muted); }
+
+    .subtitle {
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .counters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .player-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .player-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 2px solid #4b5563;
+      background: #111;
+    }
+
+    .name {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .wins {
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      color: var(--accent-2);
+    }
+
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      gap: 12px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .podium-item {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .podium-item img {
+      width: 92px;
+      height: 92px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 3px solid #6b7280;
+      margin-bottom: 8px;
+      background: #111;
+    }
+
+    .position {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 700;
+      letter-spacing: .4px;
+    }
+
+    .podium-name {
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .podium-score {
+      font-size: .95rem;
+      color: var(--muted);
+    }
+
+    .first { min-height: 220px; border-color: #f59e0b; }
+    .second { min-height: 190px; }
+    .third { min-height: 160px; }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      font-size: .95rem;
+    }
+
+    th {
+      color: #cbd5e1;
+      font-size: .9rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .winner-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .82rem;
+      background: rgba(96,165,250,.18);
+      border: 1px solid #2e4f7d;
+    }
+
+    .deck-cell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .commander-thumb {
+      width: 68px;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 780px) {
+      .podium { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 10px; }
+      .container { gap: 14px; }
+      .card { padding: 12px; }
+      h2 { font-size: 1.08rem; }
+      th, td { padding: 8px; font-size: .88rem; }
+      .commander-thumb { width: 60px; height: 86px; }
+      .deck-cell { gap: 8px; }
+      .podium-item img { width: 84px; height: 84px; }
+      .first, .second, .third { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h2>Podio actual</h2>
+      <div class="podium">
+        <article class="podium-item first">
+          <div class="position">1º Puesto</div>
+          <img src="alvaro.jpeg" alt="Álvaro" />
+          <div class="podium-name">Álvaro</div>
+          <div class="podium-score">0 victorias</div>
+        </article>
+
+        <article class="podium-item second">
+          <div class="position">2º Puesto</div>
+          <img src="sebas.jpeg" alt="Sebas" />
+          <div class="podium-name">Sebas</div>
+          <div class="podium-score">1 victoria</div>
+        </article>
+
+        <article class="podium-item third">
+          <div class="position">3º Puesto</div>
+          <img src="raul.jpg" alt="Raúl" />
+          <div class="podium-name">Raúl</div>
+          <div class="podium-score">2 victorias</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Tabla de partidas registradas</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ganador</th>
+              <th>Mazo ganador</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><span class="winner-tag">Raúl</span></td>
+              <td>
+                <div class="deck-cell">
+                  <span>Winter Oportunista Excéntrico</span>
+                  <img src="dsc-7-winter-cynical-opportunist.jpg" alt="Winter Oportunista Excéntrico" class="commander-thumb" />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><span class="winner-tag">Raúl</span></td>
+              <td>
+                <div class="deck-cell">
+                  <span>Ureni</span>
+                  <img src="tdc-9-ureni-of-the-unwritten.jpg" alt="Ureni" class="commander-thumb" />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><span class="winner-tag">Sebas</span></td>
+              <td>
+                <div class="deck-cell">
+                  <span>Zurgo</span>
+                  <img src="tdc-10-zurgo-stormrender.jpg" alt="Zurgo" class="commander-thumb" />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
